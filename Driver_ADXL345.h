@@ -1,7 +1,7 @@
 
 
 /* 
- * File:   Driver_ADXL345.h
+ * File: Driver_ADXL345.h
  * Author: EMPRIN Corentin
  * Comments:
  * Revision history: 
@@ -49,9 +49,23 @@
 #define FIFO_CTL        0x38
 #define FIFO_STATUS     0x39
 
+
+#define mode_I2C 1
+
 //Initialisation
 void ADXL345_Init(void);
 
+
+// Ecriture de donnees dans un registre
+void ADXL345_SendCmd(INT8U Register, INT8U Data);
+void ADXL345_Write8(INT8U Registre, INT8U Donnee);
+void ADXL345_Write(INT8U Registre, INT16 Donnee);
+
+// Lecture de donnees depuis un registre
+INT8U ADXL345_Read8(INT8U Registre);
+INT16 ADXL345_Read(INT8U Registre);
+
+void ADXL345_GetAcceleration8(INT8U * DATAX0);
 
 
 #endif	/* Driver_ADXL345_H */
