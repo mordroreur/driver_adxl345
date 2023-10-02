@@ -1,10 +1,11 @@
 /****************************************************************************/
-/*  MESNARD Emmanuel                                              ISIMA     */
-/*  Octobre 2020                                                            */
+/*  Groupe C                                                      ISIMA     */
+/*  Octobre 2023                                                            */
+/*                                                                          */
 /*                                                                          */
 /*                      Driver de la liaison I2C                            */
 /*                                                                          */
-/* Driver_I2C.c                     MPLAB X                    PIC 18F542   */
+/* Driver_I2C.c                     MPLAB X                    PIC 18F452   */
 /****************************************************************************/
 
 #define _Driver_I2C_C

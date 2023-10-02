@@ -38,8 +38,10 @@ void SPI_Init(void) {
     //     0 : SSPOV, No overflow
     //     0 : SSPEN,  Disables serial port and configures these pins as I/O port pins
     //     0 : CKP, IDLE state for clock is a low level
-    //     0000 : SPI Master mode, clock = FOSC/4
-	SSPCON1 = 0b00000000;
+    //     0000 : SPI Master mode, clock = FOSC/4 
+	//			//     0010 : SPI Master mode, clock = FOSC/64 
+	//			//     0001 : SPI Master mode, clock = FOSC/16 
+	SSPCON1 = 0b00000010;
 	
 	
     // Configuration du Registre de Status : SSPSTAT

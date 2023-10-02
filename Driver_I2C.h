@@ -1,22 +1,22 @@
 /****************************************************************************/
-/*  MESNARD Emmanuel                                              ISIMA     */
-/*  Octobre 2020                                                            */
+/*  Groupe C                                                      ISIMA     */
+/*  Octobre 2023                                                            */
+/*                                                                          */
 /*                                                                          */
 /*                      Driver de la liaison I2C                            */
 /*                                                                          */
-/* Driver_I2C.h                     MPLAB X                    PIC 18F542   */
+/* Driver_I2C.h                     MPLAB X                    PIC 18F452   */
 /****************************************************************************/
 
 
-#ifndef	_Driver_I2C_H
-
-#define _Driver_I2C_H
+#ifndef	_Driver_GROUPEC_I2C_H
+#define _Driver_GROUPEC_I2C_H
 
 #include "TypesMacros.h"
 
+
 // Ouverture du port I2C en mode maitre, vitesse lente
 void I2C_Init(void);
-#define I2C_Open I2C_Init
 
 // Attente de l'acquittement en provenance de l'esclave
 void I2C_AckSlave(void);
@@ -42,4 +42,7 @@ void I2C_Write(INT8U Data);
 // Lecture d'un octet de donnee 
 INT8U I2C_Read(void);
 
-#endif
+//Mapping des fonctions aves des noms qui peuvent leurs convenir
+#define I2C_Open I2C_Init
+
+#endif /*_Driver_GROUPEC_I2C_H*/
