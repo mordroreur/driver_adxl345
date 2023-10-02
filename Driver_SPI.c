@@ -41,7 +41,7 @@ void SPI_Init(void) {
     //     0000 : SPI Master mode, clock = FOSC/4 
 	//			//     0010 : SPI Master mode, clock = FOSC/64 
 	//			//     0001 : SPI Master mode, clock = FOSC/16 
-	SSPCON1 = 0b00000010;
+	SSPCON1 = 0b00000000;
 	
 	
     // Configuration du Registre de Status : SSPSTAT
