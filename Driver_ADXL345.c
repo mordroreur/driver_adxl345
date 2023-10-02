@@ -20,13 +20,13 @@ void ADXL345_Init(void){
         I2C_Init();
         Delai_ms(5); // Delai de prise en compte, optionnel
         
-        
     }
     else { //MODE SPI
         SPI_Init();
     }
     
 }
+
 
 void ADXL345_Write8(INT8U Registre, INT8U Donnee) {
   // Chronogramme d'ecriture d'un unique octet (page 19)
@@ -70,6 +70,17 @@ INT8U ADXL345_Read8(INT8U Registre) {
     I2C_Stop();
     
     return(ValeurLue);
+}
+
+INT8U ADXL345_ReadByte(INT8U Register) {
+  INT8U ValeurLue;
+  PE_CS = 0;      // Selection de la puce
+  
+  SPI_Write(0b01000001);
+  ValeurLue = SPI_ByteTransfert(Register);
+   
+  PE_CS = 1;
+  return(ValeurLue);
 }
 
 INT16 ADXL345_Read(INT8U Registre) {
