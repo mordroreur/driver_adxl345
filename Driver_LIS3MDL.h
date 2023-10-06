@@ -1,13 +1,15 @@
 /****************************************************************************/
-/*  MESNARD Emmanuel                                               ISIMA    */
-/*  Octobre 2020                                                            */
+/*  Groupe C                                                      ISIMA     */
+/*  Octobre 2023                                                            */
+/*                                                                          */
+/*                                                                          */
 /*                     Driver pour le magnetometre LIS3MDL                  */
 /*                                                                          */
 /* Driver_LIS3MDL.h                 MPLAB X                    PIC 18F542   */
 /****************************************************************************/
 
-#ifndef Driver_LIS3MDL_H
-#define Driver_LIS3MDL_H
+#ifndef Driver_GROUPEC_LIS3MDL_H
+#define Driver_GROUPEC_LIS3MDL_H
 #include <xc.h>
 #include "TypesMacros.h"
 
@@ -252,16 +254,13 @@
 void LIS3MDL_Init(void);
 
 // Lecture et ecriture dans les registres
-// INT8U LIS3MDL_Read_Register(INT8U Registre);
-// void LIS3MDL_Write_Register(INT8U Registre, INT8U Donnee);
+INT8U LIS3MDL_Read_Register(INT8U Registre);
+void LIS3MDL_Write_Register(INT8U Registre, INT8U Donnee);
 
 // Lecture des donnees
-// INT8U LIS3MDL_Read_ID();
-// void LIS3MDL_Read_Magnetic_Data(INT16 *X_Mag, INT16 *Y_Mag, INT16 *Z_Mag);
-// void LIS3MDL_Read_Temperature(INT16 *Temperature);
+INT8U LIS3MDL_Read_ID();
+void LIS3MDL_Read_Magnetic_Data(INT16 *X_Mag, INT16 *Y_Mag, INT16 *Z_Mag);
+void LIS3MDL_Read_Temperature(INT16 *Temperature);
 
-void LIS3MDL_SendCmd(INT8U Register, INT8U Data);
-INT8U LIS3MDL_GetTemp();
 
-INT8 permut(INT8 R);
-#endif 
+#endif /*Driver_GROUPEC_LIS3MDL_H*/

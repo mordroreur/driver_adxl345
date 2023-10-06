@@ -33,14 +33,14 @@ void SPI_Init(void) {
     TRISCbits.TRISC4 = 1;
     TRISCbits.TRISC5 = 0;
  
-	// Configuration du Registre de Status : SSPCON1
+    // Configuration du Registre de Status : SSPCON1
     //     0 : WCOL, no collision
     //     0 : SSPOV, No overflow
     //     0 : SSPEN,  Disables serial port and configures these pins as I/O port pins
     //     0 : CKP, IDLE state for clock is a low level
-    //     0000 : SPI Master mode, clock = FOSC/4 
-	//			//     0010 : SPI Master mode, clock = FOSC/64 
-	//			//     0001 : SPI Master mode, clock = FOSC/16 
+    //     0000 : SPI Master mode, clock = FOSC/4 // soit 8/4 = 2MHz (< 10)
+    //			//     0010 : SPI Master mode, clock = FOSC/64 
+    //			//     0001 : SPI Master mode, clock = FOSC/16 
 	SSPCON1 = 0b00000000;
 	
 	

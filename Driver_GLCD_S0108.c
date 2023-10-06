@@ -1,5 +1,5 @@
 /****************************************************************************/
-/*  MESNARD Emmanuel                                               ISIMA    */
+/*  Groupe C                                                      ISIMA     */
 /*  Octobre 2020                                                            */
 /*                                                                          */
 /*                                                                          */
@@ -8,7 +8,6 @@
 /*                                                                          */
 /* Driver_GLCD_S0108.c              MPLAB X                    PIC 18F542   */
 /****************************************************************************/
-
 // Compatible avec le Graphical LCD Xiamen Ocular GDM12864B de la carte
 // EasyPIC 6.0
 
@@ -18,7 +17,6 @@
 #include "TypesMacros.h"
 #include "Driver_GLCD_S0108.h"
 #include "Polices.h"
-
 
 
 // Variables globales
@@ -55,10 +53,7 @@ void GLCD_Pulse_E(void) {
 
 // Initialisation du GLCD
 void GLCD_Init(void) {
-  //   |~~~~  A   C O M P L E T E R   ! ~~~~|
-  //           orientation des broches,
-  //              attente power on,
-  //               gestion du RST  
+  //attente du power on
   Delay_ms(15);
   
   //orientation et initialisation
@@ -164,7 +159,6 @@ INT8U y;      // Colonne y sur 6 bits
 INT8U BitNbr; // Numero de bit sur l'octet considere
 INT8U octet;  // Octet de donnee lu a l'adresse indiquee
 
-  //   |~~~~  A   C O M P L E T E R   ! ~~~~|
   //         x = .... en fonction de XX      // Calcul la page (position x)
   //         BitNbr = .... en fonction de XX // Determine le bit dans l'octet considere
 
@@ -180,7 +174,6 @@ INT8U octet;  // Octet de donnee lu a l'adresse indiquee
     y = YY - 64; 
   }
   
-  //   |~~~~  A   C O M P L E T E R   ! ~~~~|
   //     1) Lecture de l'ancienne valeur de l'octet a cette position x, y
   //	   2) Mise a 1 du bit demande (BitNbr) sur l'octet lu
   //	   3) ecriture effective de cet octet sur l'ecran  
@@ -192,29 +185,28 @@ INT8U octet;  // Octet de donnee lu a l'adresse indiquee
 }
 
 void GLCD_ClrPixel(INT8U XX, INT8U YY) {
-INT8U x;      // Page x sur 3 bits
-INT8U y;      // Colonne y sur 6 bits  
-INT8U BitNbr; // Numero de bit sur l'octet considere
-INT8U octet;  // Octet de donnee lu a l'adresse indiquee
+  INT8U x;      // Page x sur 3 bits
+  INT8U y;      // Colonne y sur 6 bits  
+  INT8U BitNbr; // Numero de bit sur l'octet considere
+  INT8U octet;  // Octet de donnee lu a l'adresse indiquee
 
-  //   |~~~~  A   C O M P L E T E R   ! ~~~~|
 
-x = XX >> 3 ;
-BitNbr = XX & 0x0F ;
-  
+  x = XX >> 3 ;
+  BitNbr = XX & 0x0F ;
+ 
   // Calcul de la position y (Colonne, gauche ou droite)
-if (YY < 64) {
+  if (YY < 64) {
     GLCD_CS1 = 0;  GLCD_CS2 = 1;  // Partie gauche
     y = YY;
-} else {
+  } else {
     GLCD_CS1 = 1;  GLCD_CS2 = 0;  // Partie droite
     y = YY - 64; 
-}
+  }
 
-GLCD_SetPositionXY(x,y);
-octet = GLCD_ReadData();
-octet &= ~(0x01 << BitNbr);
-GLCD_SendData(octet);
+  GLCD_SetPositionXY(x,y);
+  octet = GLCD_ReadData();
+  octet &= ~(0x01 << BitNbr);
+  GLCD_SendData(octet);
 }
 
 //================================================================   
@@ -461,7 +453,7 @@ void GLCD_Chr(CHAR Caractere, INT8U Color) {
 //=================================================
 //      Création d'une Jauge selon un entier     //
 //=================================================
-void Jauge_Acc(INT8U acc_X, INT8U acc_Y, INT8U acc_Z)
+void GLCD_Jauge_Acc(INT8U acc_X, INT8U acc_Y, INT8U acc_Z)
 {
     CHAR txt [16]="Acceleration X:";
     INT8U page = 0;

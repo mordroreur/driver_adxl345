@@ -1,8 +1,16 @@
+/****************************************************************************/
+/*  Groupe C                                                      ISIMA     */
+/*  Octobre 2023                                                            */
+/*                                                                          */
+/*                                                                          */
+/*                     Driver pour le magnetometre LIS3MDL                  */
+/*                                                                          */
+/* Driver_LIS3MDL.c                 MPLAB X                    PIC 18F542   */
+/****************************************************************************/
+#include <math.h>
 #include "Driver_LIS3MDL.h"
 #include "Driver_SPI.h"
-#include <math.h>
 
-INT8U device_name;
 
 /*
 Enables the LIS3MDL's magnetometer. Also:
@@ -15,70 +23,126 @@ the registers it writes to.
 */
 void LIS3MDL_Init(void)
 {
-	// Orientation des broches
-	// 1: SPI idle mode / I2 C communication enabled;
-    // 0: SPI communication mode / I2 C disabled)
-	LIS3MDL_CS = 0;
-	TRIS_LIS3MDL_CS = 0;
-    LIS3MDL_CS = 1;
-	
-	SPI_Init();
-	
-	Delay_us(5);
-/*	LIS3MDL_CS = 0;
+  // Orientation des broches
+  // 1: SPI idle mode / I2 C communication enabled;
+  // 0: SPI communication mode / I2 C disabled)
+  // valeur par defaut
+  LIS3MDL_CS = 0;
+
+  //Orientation des pins necessaires
+  TRIS_LIS3MDL_CS = 0;
+
+  //On se met en mode SPI
+  LIS3MDL_CS = 1;
+
+  //Initialisation de la communication en SPI
+  SPI_Init();
+
+  //Temps pour etre sur qu'il soit initialisé(pas demandé dans la doc)
+  Delay_us(5);
+
+  //recuperation du nom de la bete
+  /*	LIS3MDL_CS = 0;
 	SPI_Write(LIS3DML_WHO_AM_I);
 	device_name = SPI_Read();
 	LIS3MDL_CS = 1; */
-	
-    // 0x70 = 0b11110000
-    // OM = 11 (ultra-high-performance mode for X and Y); DO = 100 (10 Hz ODR)
-    //LIS3MDL_SendCmd(LIS3MDL_CTRL_REG1, 0xF0);
-    LIS3MDL_SendCmd(LIS3MDL_CTRL_REG1, 0b10010000);
 
-    // 0x00 = 0b00000000
-    // FS = 00 (+/- 4 gauss full scale)
-    //LIS3MDL_SendCmd(LIS3MDL_CTRL_REG2, 0x00);
-    //LIS3MDL_SendCmd(LIS3MDL_CTRL_REG2, 0x00);
 
-    // 0x00 = 0b00000000
-    // MD = 00 (continuous-conversion mode)
-    LIS3MDL_SendCmd(LIS3MDL_CTRL_REG3, 0x00);
+  
+  //registre 1 :
+  //TEMP_EN : 1 = Temperature sensor enable
+  //OM1 : 0 = X/Y axis on low power mode
+  //OM0 : 0 = X/Y axis on low power mode
+  //DO2 : 1 = Output data rate 10Hz
+  //DO1 : 0 = Output data rate 10Hz
+  //DO0 : 0 = Output data rate 10Hz
+  //FAST_ODR : 0 = disable data rate higher than 80Hz
+  //ST : 0 = self Test disable
+  LIS3MDL_Write_Register(LIS3MDL_CTRL_REG1, 0b10010000);
 
-    // 0x0C = 0b00001100
-    // OMZ = 11 (ultra-high-performance mode for Z)
-    //LIS3MDL_SendCmd(LIS3MDL_CTRL_REG4, 0x0C);
+  //registre 2 :
+  //'0' : 0 = need to be 0
+  //FS1 : 0 = +- 4 gauss
+  //FS0 : 0 = +- 4 gauss
+  //'0' : 0 = need to be 0
+  //REBOOT : 0 = normal reboot 
+  //SOFT_RST : 0 = Default value
+  //'0' : 0 = need to be 0
+  //'0' : 0 = need to be 0
+  LIS3MDL_Write_Register(LIS3MDL_CTRL_REG2, 0b00000000);
 
-    // 0x40 = 0b01000000
-    // BDU = 1 (block data update)
-    //LIS3MDL_SendCmd(LIS3MDL_CTRL_REG5, 0x40);
+  //registre 3 :
+  //'0' : 0 = need to be 0
+  //'0' : 0 = need to be 0
+  //LP : 0 = disable low power mode
+  //'0' : 0 = need to be 0
+  //'0' : 0 = need to be 0
+  //SIM : 0 = 4 wire SPI-mode
+  //MD1 : 1 = Default value // operating mode : Power-down mode
+  //MD0 : 1 = Default value // operating mode : Power-down mode
+  LIS3MDL_Write_Register(LIS3MDL_CTRL_REG3, 0b00000011);
+
+  //registre 4 :
+  //'0' : 0 = need to be 0
+  //'0' : 0 = need to be 0
+  //'0' : 0 = need to be 0
+  //'0' : 0 = need to be 0
+  //OMZ1 : 0 = Z operative mode
+  //OMZ0 : 0 = Z operative mode
+  //BLE : 0 = LSB at lower address
+  //'0' : 0 = need to be 0
+  LIS3MDL_Write_Register(LIS3MDL_CTRL_REG4, 0b00000100);
+
+  //registre 5 :
+  //FAST_READ : 1 Enable(allow reading the hight part only)
+  //BDU : 0 = continuous magnetic data update
+  //'0' : 0 = need to be 0
+  //'0' : 0 = need to be 0
+  //'0' : 0 = need to be 0
+  //'0' : 0 = need to be 0
+  //'0' : 0 = need to be 0
+  //'0' : 0 = need to be 0
+  LIS3MDL_Write_Register(LIS3MDL_CTRL_REG5, 0b10000000);
 }
 
-void LIS3MDL_SendCmd(INT8U Register, INT8U Data) {
+// TODO : lock clock at 1 when not in use
+void LIS3MDL_Write_Register(INT8U Register, INT8U Data) {
   LIS3MDL_CS = 0;      // Selection de la puce
-  Delay_us(1);
   SPI_Write(0x00 | Register);
   SPI_Write(Data);
-  Delay_us(1);
   LIS3MDL_CS = 1;
-  Delay_us(10);
 }
 
-INT8U LIS3MDL_GetTemp()
-{
+// TODO : lock clock at 1 when not in use
+INT8U LIS3MDL_Read_Register(INT8U Register){
     INT8U temp = 0xa0;
-	LIS3MDL_CS = 0;      // Selection de la puce
-    Delay_us(1);
+    LIS3MDL_CS = 0;      // Selection de la puce
 	
-    SPI_Write(0b10000000 | LIS3DML_WHO_AM_I);
-	temp = SPI_Read();
+    SPI_Write(0b10000000 | Register);
+    temp = SPI_Read();
     
-    Delay_us(1);
-	LIS3MDL_CS = 1;
-    Delay_us(10);
+    LIS3MDL_CS = 1;
     return temp;
 }
 
-/*
+INT8U LIS3MDL_Read_ID(){
+  return LIS3MDL_Read_Register(LIS3DML_WHO_AM_I);
+}
+
+void LIS3MDL_Read_Magnetic_Data(INT16 *X_Mag, INT16 *Y_Mag, INT16 *Z_Mag){
+  //TODO
+}
+
+void LIS3MDL_Read_Temperature(INT16 *Temperature){
+  *Temperature = 0;
+  *Temperature = LIS3MDL_Read_Register(LIS3DML_EMP_OUT_L);
+  *Temperature |= (LIS3MDL_Read_Register(LIS3DML_EMP_OUT_H) << 8);
+}
+
+
+
+
+/*  En I2C
 // Writes a mag register
 void LIS3MDL_writeReg(INT8U reg, INT8U value)
 {
