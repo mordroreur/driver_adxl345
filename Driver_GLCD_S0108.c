@@ -62,7 +62,7 @@ void GLCD_Init(void) {
   GLCD_Data_OUT = 0x00;
   TRIS_GLCD_Data = 0x00;
   
-  //Reset simultanée des controleur G et D
+  //Reset simultanÃ©e des controleur G et D
   GLCD_CS1 = 1; GLCD_CS2 = 1;
   Delay_us(2);
   GLCD_RST = 1;
@@ -451,38 +451,56 @@ void GLCD_Chr(CHAR Caractere, INT8U Color) {
 
 
 //=================================================
-//      Création d'une Jauge selon un entier     //
+//      CrÃ©ation d'une Jauge selon un entier     //
 //=================================================
-void GLCD_Jauge_Acc(INT8U acc_X, INT8U acc_Y, INT8U acc_Z)
+void GLCD_Jauge_Acc(INT8U acc_X, INT8U acc_Y, INT8U acc_Z, INT8U temperature)
 {
     CHAR txt [16]="Acceleration X:";
     INT8U page = 0;
     INT8U column = 0;
     INT8U color = GLCD_WHITE ;
     GLCD_PrintAt(page, column, txt, color);
-    CHAR tmp [4];
+    CHAR tmp [9];
     tmp [3] = '\0';
     tmp [2] = 'G';
     tmp[0] = acc_X/160 + '0';
     tmp[1] = (acc_X/16)%10 + '0';
     GLCD_Print(tmp, color);
     
-     txt[13]='Y';
-     page = 3;
-     column = 0;
+    txt[13]='Y';
+    page = 2;
+    column = 0;
     GLCD_SetPositionXY(page, column);
     GLCD_PrintAt(page, column, txt, color);
     tmp[0] = acc_Y/160 + '0';
     tmp[1] = (acc_Y/16)%10 + '0';
     GLCD_Print(tmp, color);
     
-     txt[13]='Z';
-     page = 6;
-     column = 0;
+    txt[13]='Z';
+    page = 4;
+    column = 0;
     GLCD_SetPositionXY(page, column);
     GLCD_PrintAt(page, column, txt, color);
     tmp[0] = acc_Z/160 + '0';
     tmp[1] = (acc_Z/16)%10 + '0';
+    GLCD_Print(tmp, color);
+    
+    txt[0]='T';txt[1]='e';txt[2]='m';txt[3]='p';txt[4]='e';txt[5]='r';txt[6]='a';txt[7]='t';txt[8]='u';txt[9]='r';txt[10]='e';txt[11]=':';txt[12]='\0';
+    page = 6;
+    column = 0;
+    GLCD_SetPositionXY(page, column);
+    GLCD_PrintAt(page, column, txt, color);
+    tmp[0] = temperature/10 + '0';
+    tmp[1] = (temperature%10) + '0';
+    tmp [2] = '.';
+    tmp [3] = '0';
+    tmp [4] = 'd';
+    tmp [5] = 'e';
+    tmp [6] = 'g';
+    tmp [7] = 'C';
+    tmp [8] = '\0';
+    
+      
     GLCD_Print(tmp, color);
         
     page = 1; GLCD_CS1 = 0; GLCD_CS2 = 1;
@@ -501,7 +519,7 @@ void GLCD_Jauge_Acc(INT8U acc_X, INT8U acc_Y, INT8U acc_Z)
         }
     }
     
-    page = 4; GLCD_CS1 = 0; GLCD_CS2 = 1;
+    page = 3; GLCD_CS1 = 0; GLCD_CS2 = 1;
     for(column=0;column<acc_Y/2; column++)
     {
         GLCD_SetPositionXY(page,column);  
@@ -517,7 +535,7 @@ void GLCD_Jauge_Acc(INT8U acc_X, INT8U acc_Y, INT8U acc_Z)
         }
     }
     
-    page = 7; GLCD_CS1 = 0; GLCD_CS2 = 1;
+    page = 5; GLCD_CS1 = 0; GLCD_CS2 = 1;
     for(column=0;column<acc_Z/2; column++)
     {
         GLCD_SetPositionXY(page,column);  
@@ -533,5 +551,21 @@ void GLCD_Jauge_Acc(INT8U acc_X, INT8U acc_Y, INT8U acc_Z)
         }
     }
     
+    page = 7; GLCD_CS1 = 0; GLCD_CS2 = 1;
+    for(column=0;column<temperature*1.6; column++)
+    {
+        GLCD_SetPositionXY(page,column);  
+        GLCD_SendData(0xFF);
+    }
+    if(temperature*1.6>64)
+    {
+        GLCD_CS1 = 1; GLCD_CS2 = 0;
+        for(column=64;column<temperature*1.6; column++)
+        {
+            GLCD_SetPositionXY(page,column);  
+            GLCD_SendData(0xFF);
+        }
+    }
     
+    GLCD_CS1 = 0; GLCD_CS2 = 0;
 }
