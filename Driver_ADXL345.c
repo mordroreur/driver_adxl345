@@ -5,13 +5,11 @@
  * Created on 2 octobre 2023, 16:47
  */
 
-
+/*
 #define _Driver_ADXL345_C
 #include <xc.h>
 #include "TypesMacros.h"
 #include "Driver_ADXL345.h"
-
-
 
 void ADXL345_Init(void){
     
@@ -31,7 +29,7 @@ void ADXL345_Init(void){
 void ADXL345_Write8(INT8U Registre, INT8U Donnee) {
   // Chronogramme d'ecriture d'un unique octet (page 19)
   I2C_Start();
-  I2C_Write(CHIP_Write); 
+  I2C_Write(CHIP_Write);
   I2C_AckSlave(); 
   I2C_Write(Registre);
   I2C_AckSlave(); 
@@ -104,3 +102,4 @@ INT16 ADXL345_Read(INT8U Registre) {
     I2C_Stop();
     return(ValeurLue);
 }
+*/

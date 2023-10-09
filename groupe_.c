@@ -14,7 +14,7 @@
 
 
 // Macros et prototypes
-#include "Driver_GLCD_S0108.h"
+// #include "Driver_GLCD_S0108.h"
 #include "Driver_LIS3MDL.h"
 #include "TypesMacros.h"
 
@@ -48,7 +48,8 @@ int main(void) {
   while (1) {
     LIS3MDL_Read_Temperature(&temperature);
     //Affichage sur les leds TODO : changer pour mettre sur le GLCD
-    LATB = (temperature>>8);
+    //LATB = (temperature>>8);
+    LATB = (INT8U) temperature;
     LATD = ~PORTD;
 
     // on attend pour ne pas surcharger le capteur

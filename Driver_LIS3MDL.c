@@ -46,8 +46,6 @@ void LIS3MDL_Init(void)
 	SPI_Write(LIS3DML_WHO_AM_I);
 	device_name = SPI_Read();
 	LIS3MDL_CS = 1; */
-
-
   
   //registre 1 :
   //TEMP_EN : 1 = Temperature sensor enable
@@ -91,10 +89,10 @@ void LIS3MDL_Init(void)
   //OMZ0 : 0 = Z operative mode
   //BLE : 0 = LSB at lower address
   //'0' : 0 = need to be 0
-  LIS3MDL_Write_Register(LIS3MDL_CTRL_REG4, 0b00000100);
+  LIS3MDL_Write_Register(LIS3MDL_CTRL_REG4, 0b00000000);
 
   //registre 5 :
-  //FAST_READ : 1 Enable(allow reading the hight part only)
+  //FAST_READ : 0 Disable(don t allow reading the hight part only)
   //BDU : 0 = continuous magnetic data update
   //'0' : 0 = need to be 0
   //'0' : 0 = need to be 0
@@ -102,7 +100,7 @@ void LIS3MDL_Init(void)
   //'0' : 0 = need to be 0
   //'0' : 0 = need to be 0
   //'0' : 0 = need to be 0
-  LIS3MDL_Write_Register(LIS3MDL_CTRL_REG5, 0b10000000);
+  LIS3MDL_Write_Register(LIS3MDL_CTRL_REG5, 0b00000000);
 }
 
 // TODO : lock clock at 1 when not in use
@@ -133,10 +131,10 @@ void LIS3MDL_Read_Magnetic_Data(INT16 *X_Mag, INT16 *Y_Mag, INT16 *Z_Mag){
   //TODO
 }
 
-void LIS3MDL_Read_Temperature(INT16 *Temperature){
+void LIS3MDL_Read_Temperature(INT16U *Temperature){
   *Temperature = 0;
-  *Temperature = LIS3MDL_Read_Register(LIS3DML_EMP_OUT_L);
-  *Temperature |= (LIS3MDL_Read_Register(LIS3DML_EMP_OUT_H) << 8);
+  *Temperature = LIS3MDL_Read_Register(LIS3MDL_TEMP_OUT_L);
+  *Temperature |= (INT8U) (LIS3MDL_Read_Register(LIS3MDL_TEMP_OUT_H) << 8);
 }
 
 

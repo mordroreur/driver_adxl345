@@ -18,6 +18,11 @@
 
 //Définition des registres pour l'acceleromètre
 
+// todo
+#define CHIP_Write 0x00
+#define CHIP_Read 0x00
+#define PE_CS 0x00
+
 #define DEVID           0x00
 #define THRESH_TAP      0x1D
 #define OFSX            0x1E
