@@ -62,7 +62,7 @@ void GLCD_Init(void) {
   GLCD_Data_OUT = 0x00;
   TRIS_GLCD_Data = 0x00;
   
-  //Reset simultanÃ©e des controleur G et D
+  //Reset simultanée des controleur G et D
   GLCD_CS1 = 1; GLCD_CS2 = 1;
   Delay_us(2);
   GLCD_RST = 1;
@@ -451,7 +451,7 @@ void GLCD_Chr(CHAR Caractere, INT8U Color) {
 
 
 //=================================================
-//      CrÃ©ation d'une Jauge selon un entier     //
+//      Création d'une Jauge selon un entier     //
 //=================================================
 void GLCD_Jauge_Acc(INT8U acc_X, INT8U acc_Y, INT8U acc_Z, INT8U temperature)
 {

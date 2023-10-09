@@ -13,16 +13,15 @@
 #define	_Driver_ADXL345_H
 
 #include <xc.h>   
-#include "Driver_I2C.h"
 
 #include "TypesMacros.h"
 
 //Définition des registres pour l'acceleromètre
 
 // todo
-#define CHIP_Write 0x3A
-#define CHIP_Read 0x3B
-
+#define CHIP_Write 0x00
+#define CHIP_Read 0x00
+#define PE_CS 0x00
 
 #define DEVID           0x00
 #define THRESH_TAP      0x1D
@@ -56,7 +55,7 @@
 #define FIFO_STATUS     0x39
 
 
-// #define mode_I2C 1 // I2C obligatoire
+#define mode_I2C 1
 
 //Initialisation
 void ADXL345_Init(void);
@@ -71,7 +70,7 @@ void ADXL345_Write(INT8U Registre, INT16 Donnee);
 INT8U ADXL345_Read8(INT8U Registre);
 INT16 ADXL345_Read(INT8U Registre);
 
-void ADXL345_GetAcceleration8(INT16U * DATAx, INT16U * DATAy ,INT16U * DATAz);
+void ADXL345_GetAcceleration8(INT8U * DATAX0);
 
 
 #endif	/* Driver_ADXL345_H */

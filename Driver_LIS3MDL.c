@@ -9,7 +9,8 @@
 /****************************************************************************/
 #include <math.h>
 #include "Driver_LIS3MDL.h"
-#include "Driver_SPI.h"
+// #include "Driver_SPI.h"
+#include "Driver_I2C.h"
 
 
 /*
@@ -27,19 +28,25 @@ void LIS3MDL_Init(void)
   // 1: SPI idle mode / I2 C communication enabled;
   // 0: SPI communication mode / I2 C disabled)
   // valeur par defaut
-  LIS3MDL_CS = 0;
+  // LIS3MDL_CS = 1;
 
   //Orientation des pins necessaires
-  TRIS_LIS3MDL_CS = 0;
+  // TRIS_LIS3MDL_CS = 0;
 
   //On se met en mode SPI
-  LIS3MDL_CS = 1;
+  // LIS3MDL_CS = 1;
 
+  
   //Initialisation de la communication en SPI
-  SPI_Init();
+  // SPI_Init();
+  I2C_Init();
 
   //Temps pour etre sur qu'il soit initialisé(pas demandé dans la doc)
-  Delay_us(5);
+  Delay_ms(10);
+  
+  LIS3MDL_Write_Register(LIS3MDL_CTRL_REG1, LIS3MDL_SOFT_RESET_ENABLE);
+  
+  Delay_ms(10);
 
   //recuperation du nom de la bete
   /*	LIS3MDL_CS = 0;
@@ -57,6 +64,7 @@ void LIS3MDL_Init(void)
   //FAST_ODR : 0 = disable data rate higher than 80Hz
   //ST : 0 = self Test disable
   LIS3MDL_Write_Register(LIS3MDL_CTRL_REG1, 0b10010000);
+  
 
   //registre 2 :
   //'0' : 0 = need to be 0
@@ -78,7 +86,7 @@ void LIS3MDL_Init(void)
   //SIM : 0 = 4 wire SPI-mode
   //MD1 : 1 = Default value // operating mode : Power-down mode
   //MD0 : 1 = Default value // operating mode : Power-down mode
-  LIS3MDL_Write_Register(LIS3MDL_CTRL_REG3, 0b00000011);
+  LIS3MDL_Write_Register(LIS3MDL_CTRL_REG3, 0b00000000);
 
   //registre 4 :
   //'0' : 0 = need to be 0
@@ -103,23 +111,52 @@ void LIS3MDL_Init(void)
   LIS3MDL_Write_Register(LIS3MDL_CTRL_REG5, 0b00000000);
 }
 
-// TODO : lock clock at 1 when not in use
+
 void LIS3MDL_Write_Register(INT8U Register, INT8U Data) {
-  LIS3MDL_CS = 0;      // Selection de la puce
-  SPI_Write(0x00 | Register);
-  SPI_Write(Data);
-  LIS3MDL_CS = 1;
+    /* SPI
+    LIS3MDL_CS = 0;      // Selection de la puce
+    SPI_Write(0x00 | Register);
+    SPI_Write(Data);
+    LIS3MDL_CS = 1;
+     */
+    
+    /* I2C */
+    I2C_Start();
+    I2C_Write(0x38);
+    I2C_AckSlave(); 
+    I2C_Write(Register);
+    I2C_AckSlave(); 
+    I2C_Write(Data);
+    I2C_AckSlave();
+    I2C_Stop();
 }
 
-// TODO : lock clock at 1 when not in use
+
 INT8U LIS3MDL_Read_Register(INT8U Register){
-    INT8U temp = 0xa0;
+    INT8U temp = 0x00;
+    
+    /* SPI 
     LIS3MDL_CS = 0;      // Selection de la puce
-	
+
     SPI_Write(0b10000000 | Register);
     temp = SPI_Read();
     
     LIS3MDL_CS = 1;
+    */
+    
+    // I2C
+    I2C_Start();
+    I2C_Write(0x38);
+    I2C_AckSlave();
+    I2C_Write(Register);
+    I2C_AckSlave();
+    I2C_ReStart();
+    I2C_Write(0x39);
+    I2C_AckSlave();
+    temp = I2C_Read();
+    I2C_NAck();
+    I2C_Stop();
+    
     return temp;
 }
 
@@ -128,13 +165,21 @@ INT8U LIS3MDL_Read_ID(){
 }
 
 void LIS3MDL_Read_Magnetic_Data(INT16 *X_Mag, INT16 *Y_Mag, INT16 *Z_Mag){
-  //TODO
+  *X_Mag = 0;
+  *X_Mag = LIS3MDL_Read_Register(LIS3MDL_OUT_X_L);
+  (*Y_Mag) |= (LIS3MDL_Read_Register(LIS3MDL_OUT_X_H) << 8);
+  *Y_Mag = 0;
+  *Y_Mag = LIS3MDL_Read_Register(LIS3MDL_OUT_Y_L);
+  (*Y_Mag) |= (LIS3MDL_Read_Register(LIS3MDL_OUT_Y_H) << 8);
+  *Z_Mag = 0;
+  *Z_Mag = LIS3MDL_Read_Register(LIS3MDL_OUT_Z_L);
+  (*Z_Mag) |= (LIS3MDL_Read_Register(LIS3MDL_OUT_Z_H) << 8);
 }
 
-void LIS3MDL_Read_Temperature(INT16U *Temperature){
+void LIS3MDL_Read_Temperature(INT16 *Temperature){
   *Temperature = 0;
   *Temperature = LIS3MDL_Read_Register(LIS3MDL_TEMP_OUT_L);
-  *Temperature |= (INT8U) (LIS3MDL_Read_Register(LIS3MDL_TEMP_OUT_H) << 8);
+  (*Temperature) |= (LIS3MDL_Read_Register(LIS3MDL_TEMP_OUT_H) << 8);
 }
 
 

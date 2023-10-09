@@ -14,14 +14,16 @@
 
 
 // Macros et prototypes
-// #include "Driver_GLCD_S0108.h"
-//#include "Driver_LIS3MDL.h"
-#include "Driver_ADXL345.h"
+#include "Driver_GLCD_S0108.h"
+#include "Driver_LIS3MDL.h"
 #include "TypesMacros.h"
 
 int main(void) {
   //initialisation des variables
-  INT16U temperature = 0;
+  INT16 temperature = 0;
+  INT16 mag_x = 0;
+  INT16 mag_y = 0;
+  INT16 mag_z = 0;
   
   //Valeur de basepar defaut sur les pins
   LATA = 0;
@@ -38,35 +40,28 @@ int main(void) {
   TRISE = 0;
   
   //initailisation des drivers nécessaires
-  //LIS3MDL_Init();
+  LIS3MDL_Init();
+  GLCD_Init();
   
-  ADXL345_Init();
+  
   //On utilise D pour le clignotement
-  LATD = 0xAA;
-  LATB = 0x00;
+  //LATD = 0xAA;
 
-  //Initialisation de variables
-  INT16U Ax;
-  INT16U Ay;
-  INT16U Az;
     
   // Animation avec un clignotement ainsi que affichage de la temperature
   while (1) {
-      /*
     LIS3MDL_Read_Temperature(&temperature);
+    LIS3MDL_Read_Magnetic_Data(&mag_x, &mag_y, &mag_z);
     //Affichage sur les leds TODO : changer pour mettre sur le GLCD
     //LATB = (temperature>>8);
-       * 
-    LATB = (INT8U) temperature;
-    LATD = ~PORTD;
-       * */
-      
-    /*
-    ADXL345_GetAcceleration8(&Ax, &Ay, &Az);
+    //LATB = (INT8U) temperature;
+    //LATB = LIS3MDL_Read_ID();
+    //LATD = ~PORTD;
     
-    LATB = Ax>>8;
-     */
-    LATD = ~PORTD;
+    
+    
+    temperature = (temperature/8) + 25;
+    GLCD_Jauge_Acc((INT8U)(mag_x/8), (INT8U)(mag_y/8), (INT8U)(mag_z/8), (INT8U)(temperature));
     // on attend pour ne pas surcharger le capteur
     Delay_ms(500);
   }

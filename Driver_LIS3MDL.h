@@ -260,7 +260,7 @@ void LIS3MDL_Write_Register(INT8U Registre, INT8U Donnee);
 // Lecture des donnees
 INT8U LIS3MDL_Read_ID();
 void LIS3MDL_Read_Magnetic_Data(INT16 *X_Mag, INT16 *Y_Mag, INT16 *Z_Mag);
-void LIS3MDL_Read_Temperature(INT16U *Temperature);
+void LIS3MDL_Read_Temperature(INT16 *Temperature);
 
 
 #endif /*Driver_GROUPEC_LIS3MDL_H*/
