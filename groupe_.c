@@ -15,7 +15,8 @@
 
 // Macros et prototypes
 // #include "Driver_GLCD_S0108.h"
-#include "Driver_LIS3MDL.h"
+//#include "Driver_LIS3MDL.h"
+#include "Driver_ADXL345.h"
 #include "TypesMacros.h"
 
 int main(void) {
@@ -37,21 +38,35 @@ int main(void) {
   TRISE = 0;
   
   //initailisation des drivers nécessaires
-  LIS3MDL_Init();
+  //LIS3MDL_Init();
   
-  
+  ADXL345_Init();
   //On utilise D pour le clignotement
   LATD = 0xAA;
+  LATB = 0x00;
 
+  //Initialisation de variables
+  INT16U Ax;
+  INT16U Ay;
+  INT16U Az;
     
   // Animation avec un clignotement ainsi que affichage de la temperature
   while (1) {
+      /*
     LIS3MDL_Read_Temperature(&temperature);
     //Affichage sur les leds TODO : changer pour mettre sur le GLCD
     //LATB = (temperature>>8);
+       * 
     LATB = (INT8U) temperature;
     LATD = ~PORTD;
-
+       * */
+      
+    /*
+    ADXL345_GetAcceleration8(&Ax, &Ay, &Az);
+    
+    LATB = Ax>>8;
+     */
+    LATD = ~PORTD;
     // on attend pour ne pas surcharger le capteur
     Delay_ms(500);
   }
