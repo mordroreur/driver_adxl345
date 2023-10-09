@@ -171,6 +171,6 @@ void GLCD_Print(CHAR *Texte, INT8U Color);
 void GLCD_ChrAt(INT8U Ligne, INT8U Y, CHAR Caractere, INT8U Color);
 void GLCD_Chr(CHAR Caractere, INT8U Color);
 
-void GLCD_Jauge_Acc(INT8U, INT8U, INT8U);
+void GLCD_Jauge_Acc(INT8U, INT8U, INT8U, INT8U);
 
 #endif   
