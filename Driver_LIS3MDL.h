@@ -245,13 +245,21 @@
 #define LIS3MDL_MASK_INT_SRC_MROI         (0x02)
 #define LIS3MDL_MASK_INT_SRC_INT          (0x01)
 
+//================================================================   
+//    Constantes de configuration du magnetometre LIS3MDL
+//================================================================
+
+#define LIS3MDL_I2C_MODE 0b00000000 // default mode
+#define LIS3MDL_SPI_MODE 0b00000001 // alternative mode
+
+extern INT8U LIS3MDL_COM_MODE;
 
 //================================================================   
 //         Fonctions de gestion du magnetometre LIS3MDL
 //================================================================
 
 // Ouverture du LIS3MDL en mode SPI
-void LIS3MDL_Init(void);
+void LIS3MDL_Init(INT8U mode);
 
 // Lecture et ecriture dans les registres
 INT8U LIS3MDL_Read_Register(INT8U Registre);
