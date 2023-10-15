@@ -1,11 +1,12 @@
-
-
-/* 
- * File: Driver_ADXL345.h
- * Author: EMPRIN Corentin
- * Comments:
- * Revision history: 
- */
+/****************************************************************************/
+/*  Groupe C                                                      ISIMA     */
+/*  Octobre 2023                                                            */
+/*                                                                          */
+/*                                                                          */
+/*                      Driver de l'accelerometre ADXL345                   */
+/*                                                                          */
+/* Driver_ADXL345.h                 MPLAB X                    PIC 18F452   */
+/****************************************************************************/
 
 // This is a guard condition so that contents of this file are not included
 // more than once.  
@@ -17,7 +18,7 @@
 
 #include "TypesMacros.h"
 
-//Définition des registres pour l'acceleromètre
+//DÃ©finition des registres pour l'acceleromÃ¨tre
 
 // todo
 #define CHIP_Write 0x3A
