@@ -1,9 +1,12 @@
-/*
- * File:   Driver_ADXL345.c
- * Author: coemprin
- *
- * Created on 2 octobre 2023, 16:47
- */
+/****************************************************************************/
+/*  Groupe C                                                      ISIMA     */
+/*  Octobre 2023                                                            */
+/*                                                                          */
+/*                                                                          */
+/*                      Driver de l'accelerometre ADXL345                   */
+/*                                                                          */
+/* Driver_ADXL345.c                 MPLAB X                    PIC 18F452   */
+/****************************************************************************/
 
 #define _Driver_ADXL345_C
 #include <xc.h>
